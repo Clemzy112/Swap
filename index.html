@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0b0b0f">
+
+<title>Crypto Swap</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:#0b0b0f;
+  color:#fff;
+  min-height:100vh;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+/* =========================
+   APP
+========================= */
+
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100vh;
+  margin:auto;
+  background:#0b0b0f;
+  position:relative;
+  overflow:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+}
+
+.headerTitle{
+  font-size:24px;
+  font-weight:700;
+}
+
+.headerRight{
+  display:flex;
+  gap:10px;
+}
+
+.iconBtn{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#1d1d22;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.iconBtn svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:10px 16px 35px;
+}
+
+.subtitle{
+  color:#85858d;
+  font-size:14px;
+  margin:2px 3px 18px;
+}
+
+/* =========================
+   SWAP CARD
+========================= */
+
+.swapCard{
+  background:#151519;
+  border:1px solid #24242a;
+  border-radius:24px;
+  padding:10px;
+}
+
+.tokenBox{
+  background:#202025;
+  border-radius:19px;
+  padding:15px;
+  min-height:142px;
+}
+
+.boxTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#96969f;
+  font-size:13px;
+  margin-bottom:13px;
+}
+
+.balance{
+  color:#9c9ca5;
+}
+
+.maxBtn{
+  background:#303037;
+  color:#79a8ff;
+  border-radius:8px;
+  padding:5px 8px;
+  font-size:11px;
+  font-weight:700;
+  margin-left:6px;
+}
+
+.amountRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.amountInput{
+  min-width:0;
+  flex:1;
+  background:transparent;
+  border:0;
+  outline:none;
+  color:#fff;
+  font-size:34px;
+  font-weight:600;
+}
+
+.amountInput::placeholder{
+  color:#53535b;
+}
+
+.tokenSelect{
+  flex-shrink:0;
+  background:#303037;
+  color:#fff;
+  border-radius:14px;
+  min-height:50px;
+  padding:7px 10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+}
+
+.tokenSelect:hover{
+  background:#37373e;
+}
+
+.tokenIcon{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:800;
+  color:#fff;
+  flex-shrink:0;
+}
+
+.tokenName{
+  max-width:75px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.chevron{
+  width:16px;
+  height:16px;
+  fill:none;
+  stroke:#aaa;
+  stroke-width:2;
+}
+
+/* =========================
+   SWITCH
+========================= */
+
+.switchWrap{
+  height:0;
+  position:relative;
+  z-index:5;
+}
+
+.switchBtn{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#29292f;
+  border:5px solid #151519;
+  position:absolute;
+  left:50%;
+  top:-24px;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+}
+
+.switchBtn svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* =========================
+   RATE
+========================= */
+
+.rateBox{
+  padding:18px 4px 4px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#898991;
+  font-size:13px;
+}
+
+.rateValue{
+  color:#b9b9c1;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.settings{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+
+.setting{
+  background:#151519;
+  border:1px solid #24242a;
+  border-radius:16px;
+  padding:14px;
+}
+
+.settingLabel{
+  color:#777780;
+  font-size:11px;
+  margin-bottom:7px;
+}
+
+.settingValue{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+}
+
+.settingValue svg{
+  width:14px;
+  height:14px;
+  fill:none;
+  stroke:#777;
+  stroke-width:2;
+}
+
+/* =========================
+   SWAP BUTTON
+========================= */
+
+.swapMainBtn{
+  width:100%;
+  height:58px;
+  margin-top:16px;
+  border-radius:17px;
+  background:linear-gradient(135deg,#675cff,#8b6cff);
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  box-shadow:0 10px 30px rgba(112,92,255,.18);
+}
+
+.swapMainBtn:active{
+  transform:scale(.98);
+}
+
+.swapMainBtn.disabled{
+  background:#29292e;
+  color:#707078;
+  box-shadow:none;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info{
+  margin-top:18px;
+  padding:14px 15px;
+  background:#111116;
+  border:1px solid #202027;
+  border-radius:15px;
+}
+
+.infoRow{
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  font-size:12px;
+}
+
+.infoRow span:first-child{
+  color:#777780;
+}
+
+.infoRow span:last-child{
+  color:#c3c3ca;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:100;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  width:100%;
+  max-width:520px;
+  max-height:85vh;
+  background:#17171c;
+  border-radius:26px 26px 0 0;
+  padding:18px 16px 25px;
+  animation:slideUp .22s ease;
+}
+
+@keyframes slideUp{
+  from{
+    transform:translateY(100%);
+  }
+  to{
+    transform:translateY(0);
+  }
+}
+
+.modalHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:17px;
+}
+
+.modalTitle{
+  font-size:19px;
+  font-weight:700;
+}
+
+.closeBtn{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#28282e;
+  color:#aaa;
+  font-size:20px;
+}
+
+.search{
+  width:100%;
+  height:48px;
+  border-radius:14px;
+  background:#222228;
+  border:1px solid #303038;
+  outline:none;
+  color:#fff;
+  padding:0 15px;
+  margin-bottom:12px;
+}
+
+.search::placeholder{
+  color:#66666e;
+}
+
+.tokenList{
+  overflow:auto;
+  max-height:58vh;
+}
+
+.tokenItem{
+  width:100%;
+  background:transparent;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:#fff;
+  padding:13px 7px;
+  border-radius:13px;
+  text-align:left;
+}
+
+.tokenItem:hover{
+  background:#222228;
+}
+
+.tokenInfo{
+  flex:1;
+  min-width:0;
+}
+
+.tokenSymbol{
+  font-weight:700;
+  font-size:15px;
+}
+
+.tokenFullName{
+  color:#777780;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.tokenPrice{
+  text-align:right;
+}
+
+.tokenPrice strong{
+  display:block;
+  font-size:13px;
+}
+
+.tokenPrice small{
+  display:block;
+  color:#6d6d75;
+  margin-top:3px;
+}
+
+/* =========================
+   CONFIRM MODAL
+========================= */
+
+.confirmBox{
+  text-align:center;
+}
+
+.confirmIcon{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  margin:5px auto 17px;
+  background:rgba(65,211,128,.12);
+  color:#4ee28d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.confirmIcon svg{
+  width:32px;
+  height:32px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.confirmAmount{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.confirmText{
+  color:#85858e;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.confirmDetails{
+  background:#222228;
+  border-radius:15px;
+  padding:12px 14px;
+  text-align:left;
+  margin-bottom:15px;
+}
+
+.confirmRow{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+  font-size:13px;
+}
+
+.confirmRow span:first-child{
+  color:#777780;
+}
+
+.confirmRow span:last-child{
+  color:#ddd;
+}
+
+.confirmButtons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.cancelBtn,
+.confirmBtn{
+  height:53px;
+  border-radius:15px;
+  font-weight:700;
+}
+
+.cancelBtn{
+  background:#29292f;
+  color:#fff;
+}
+
+.confirmBtn{
+  background:linear-gradient(135deg,#675cff,#8b6cff);
+  color:#fff;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,20px);
+  background:#29292e;
+  border:1px solid #3b3b43;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:13px;
+  font-size:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:300;
+  white-space:nowrap;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:380px){
+
+  .amountInput{
+    font-size:29px;
+  }
+
+  .tokenSelect{
+    padding:6px 8px;
+  }
+
+  .tokenName{
+    max-width:55px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <div class="headerTitle">
+      Swap
+    </div>
+
+    <div class="headerRight">
+
+      <button class="iconBtn" onclick="showToast('Settings')">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/>
+          <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.9 1.9-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.7v-.09a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.9-1.9.06-.06A1.7 1.7 0 0 0 7.76 15a1.7 1.7 0 0 0-1.56-1.03H6v-2.7h.2A1.7 1.7 0 0 0 7.76 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.9-1.9.06.06A1.7 1.7 0 0 0 11.2 6.9 1.7 1.7 0 0 0 12.23 5.3V5h2.7v.3A1.7 1.7 0 0 0 16 6.9a1.7 1.7 0 0 0 1.88-.34l.06-.06 1.9 1.9-.06.06A1.7 1.7 0 0 0 19.44 10a1.7 1.7 0 0 0 1.56 1.03h.2v2.7h-.2A1.7 1.7 0 0 0 19.4 15Z"/>
+        </svg>
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <main class="content">
+
+    <div class="subtitle">
+      Exchange one cryptocurrency for another
+    </div>
+
+
+    <!-- SWAP CARD -->
+    <section class="swapCard">
+
+      <!-- PAY -->
+      <div class="tokenBox">
+
+        <div class="boxTop">
+          <span>You pay</span>
+
+          <span class="balance">
+            Balance:
+            <b id="fromBalance">0.00</b>
+            <button class="maxBtn" onclick="useMax()">MAX</button>
+          </span>
+        </div>
+
+        <div class="amountRow">
+
+          <input
+            id="fromAmount"
+            class="amountInput"
+            type="number"
+            inputmode="decimal"
+            placeholder="0"
+            min="0"
+            step="any"
+            oninput="calculateSwap()"
+          >
+
+          <button
+            class="tokenSelect"
+            onclick="openTokenModal('from')"
+          >
+
+            <span
+              id="fromIcon"
+              class="tokenIcon"
+            >₿</span>
+
+            <span
+              id="fromName"
+              class="tokenName"
+            >BTC</span>
+
+            <svg class="chevron" viewBox="0 0 24 24">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- SWITCH -->
+      <div class="switchWrap">
+
+        <button
+          class="switchBtn"
+          onclick="switchTokens()"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M7 7h10l-3-3"/>
+            <path d="m17 7-3 3"/>
+            <path d="M17 17H7l3 3"/>
+            <path d="m7 17 3-3"/>
+          </svg>
+        </button>
+
+      </div>
+
+
+      <!-- RECEIVE -->
+      <div class="tokenBox">
+
+        <div class="boxTop">
+          <span>You receive</span>
+
+          <span>
+            <span id="receiveBalanceLabel">
+              Balance:
+            </span>
+            <b id="toBalance">0.00</b>
+          </span>
+        </div>
+
+        <div class="amountRow">
+
+          <input
+            id="toAmount"
+            class="amountInput"
+            type="text"
+            placeholder="0"
+            readonly
+          >
+
+          <button
+            class="tokenSelect"
+            onclick="openTokenModal('to')"
+          >
+
+            <span
+              id="toIcon"
+              class="tokenIcon"
+            >Ξ</span>
+
+            <span
+              id="toName"
+              class="tokenName"
+            >ETH</span>
+
+            <svg class="chevron" viewBox="0 0 24 24">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- RATE -->
+      <div class="rateBox">
+
+        <span>Rate</span>
+
+        <span
+          id="rateText"
+          class="rateValue"
+        >
+          1 BTC ≈ 20 ETH
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <!-- SETTINGS -->
+    <div class="settings">
+
+      <button class="setting" onclick="showToast('Slippage options')">
+
+        <div class="settingLabel">
+          Slippage
+        </div>
+
+        <div class="settingValue">
+          <span id="slippageValue">0.5%</span>
+
+          <svg viewBox="0 0 24 24">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </div>
+
+      </button>
+
+
+      <button class="setting" onclick="showToast('Provider options')">
+
+        <div class="settingLabel">
+          Provider
+        </div>
+
+        <div class="settingValue">
+
+          <span>
+            Demo Router
+          </span>
+
+          <svg viewBox="0 0 24 24">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+
+        </div>
+
+      </button>
+
+    </div>
+
+
+    <!-- MAIN BUTTON -->
+    <button
+      id="swapButton"
+      class="swapMainBtn disabled"
+      onclick="openConfirm()"
+    >
+      Enter amount
+    </button>
+
+
+    <!-- DETAILS -->
+    <div class="info">
+
+      <div class="infoRow">
+        <span>Network fee</span>
+        <span id="networkFee">$0.00</span>
+      </div>
+
+      <div class="infoRow">
+        <span>Minimum received</span>
+        <span id="minimumReceived">0</span>
+      </div>
+
+      <div class="infoRow">
+        <span>Price impact</span>
+        <span>0.00%</span>
+      </div>
+
+      <div class="infoRow">
+        <span>Exchange rate</span>
+        <span id="detailRate">—</span>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- =========================
+     TOKEN MODAL
+========================= -->
+
+<div
+  id="tokenModal"
+  class="modal"
+  onclick="closeModalOutside(event)"
+>
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+
+      <div class="modalTitle">
+        Select token
+      </div>
+
+      <button
+        class="closeBtn"
+        onclick="closeTokenModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <input
+      id="tokenSearch"
+      class="search"
+      placeholder="Search token"
+      oninput="filterTokens()"
+    >
+
+    <div
+      id="tokenList"
+      class="tokenList"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     CONFIRM MODAL
+========================= -->
+
+<div
+  id="confirmModal"
+  class="modal"
+  onclick="closeConfirmOutside(event)"
+>
+
+  <div class="modalBox">
+
+    <div class="confirmBox">
+
+      <div class="confirmIcon">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M5 12.5 9.5 17 19 7"/>
+        </svg>
+
+      </div>
+
+      <div
+        id="confirmAmount"
+        class="confirmAmount"
+      >
+        0
+      </div>
+
+      <div class="confirmText">
+        Review this swap before confirming.
+        This is a front-end demonstration and does
+        not broadcast a blockchain transaction.
+      </div>
+
+      <div class="confirmDetails">
+
+        <div class="confirmRow">
+          <span>You pay</span>
+          <span id="confirmFrom">—</span>
+        </div>
+
+        <div class="confirmRow">
+          <span>You receive</span>
+          <span id="confirmTo">—</span>
+        </div>
+
+        <div class="confirmRow">
+          <span>Rate</span>
+          <span id="confirmRate">—</span>
+        </div>
+
+        <div class="confirmRow">
+          <span>Network fee</span>
+          <span id="confirmFee">$0.00</span>
+        </div>
+
+      </div>
+
+      <div class="confirmButtons">
+
+        <button
+          class="cancelBtn"
+          onclick="closeConfirm()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="confirmBtn"
+          onclick="completeSwap()"
+        >
+          Confirm Swap
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div
+  id="toast"
+  class="toast"
+>
+  Done
+</div>
+
+
+<script>
+
+/* ==========================================================
+   MANUAL TOKEN DATA
+   ==========================================================
+
+   CHANGE YOUR PRICES AND BALANCES HERE.
+
+   price = USD price of one token
+   balance = amount displayed as the user's balance
+
+   These values are NOT taken from CoinGecko or any live API.
+   ========================================================== */
+
+const TOKENS = {
+
+  BTC:{
+    symbol:"BTC",
+    name:"Bitcoin",
+    price:60000,
+    balance:0.00,
+    icon:"₿",
+    color:"#f7931a"
+  },
+
+  ETH:{
+    symbol:"ETH",
+    name:"Ethereum",
+    price:3000,
+    balance:0.01353,
+    icon:"Ξ",
+    color:"#627eea"
+  },
+
+  BNB:{
+    symbol:"BNB",
+    name:"BNB",
+    price:600,
+    balance:0.00,
+    icon:"B",
+    color:"#f3ba2f"
+  },
+
+  TRX:{
+    symbol:"TRX",
+    name:"TRON",
+    price:0.25,
+    balance:0.00,
+    icon:"T",
+    color:"#ef0027"
+  },
+
+  XRP:{
+    symbol:"XRP",
+    name:"XRP",
+    price:0.60,
+    balance:0.00,
+    icon:"X",
+    color:"#23292f"
+  },
+
+  USDT_ERC20:{
+    symbol:"USDT",
+    name:"Tether USD — ERC20",
+    network:"ERC20",
+    price:1,
+    balance:250000,
+    icon:"₮",
+    color:"#26a17b"
+  },
+
+  USDT_TRC20:{
+    symbol:"USDT",
+    name:"Tether USD — TRC20",
+    network:"TRC20",
+    price:1,
+    balance:0.00,
+    icon:"₮",
+    color:"#26a17b"
+  },
+
+  USDT_BEP20:{
+    symbol:"USDT",
+    name:"Tether USD — BEP20",
+    network:"BEP20",
+    price:1,
+    balance:0.00,
+    icon:"₮",
+    color:"#26a17b"
+  }
+
+};
+
+
+/* ==========================================================
+   CURRENT SELECTION
+========================================================== */
+
+let fromToken = "BTC";
+let toToken = "ETH";
+let selectingSide = "from";
+
+
+/* ==========================================================
+   ELEMENTS
+========================================================== */
+
+const fromAmount = document.getElementById("fromAmount");
+const toAmount = document.getElementById("toAmount");
+
+const fromBalance = document.getElementById("fromBalance");
+const toBalance = document.getElementById("toBalance");
+
+const fromIcon = document.getElementById("fromIcon");
+const toIcon = document.getElementById("toIcon");
+
+const fromName = document.getElementById("fromName");
+const toName = document.getElementById("toName");
+
+const rateText = document.getElementById("rateText");
+const detailRate = document.getElementById("detailRate");
+
+const minimumReceived =
+  document.getElementById("minimumReceived");
+
+const swapButton =
+  document.getElementById("swapButton");
+
+const networkFee =
+  document.getElementById("networkFee");
+
+
+/* ==========================================================
+   FORMAT NUMBERS
+========================================================== */
+
+function formatNumber(value){
+
+  if(!isFinite(value)){
+    return "0";
+  }
+
+  if(value === 0){
+    return "0.00";
+  }
+
+  if(value >= 1000000){
+    return value.toLocaleString(
+      undefined,
+      {
+        maximumFractionDigits:2
+      }
+    );
+  }
+
+  if(value >= 1){
+    return value.toLocaleString(
+      undefined,
+      {
+        maximumFractionDigits:8
+      }
+    );
+  }
+
+  return value.toLocaleString(
+    undefined,
+    {
+      maximumFractionDigits:10
+    }
+  );
+}
+
+
+function formatUSD(value){
+
+  return "$" + Number(value).toLocaleString(
+    undefined,
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+/* ==========================================================
+   UPDATE TOKEN DISPLAY
+========================================================== */
+
+function updateDisplay(){
+
+  const from = TOKENS[fromToken];
+  const to = TOKENS[toToken];
+
+
+  /* FROM */
+
+  fromIcon.textContent = from.icon;
+  fromIcon.style.background = from.color;
+
+  fromName.textContent =
+    from.network
+      ? from.symbol + " " + from.network
+      : from.symbol;
+
+  fromBalance.textContent =
+    formatNumber(from.balance);
+
+
+  /* TO */
+
+  toIcon.textContent = to.icon;
+  toIcon.style.background = to.color;
+
+  toName.textContent =
+    to.network
+      ? to.symbol + " " + to.network
+      : to.symbol;
+
+  toBalance.textContent =
+    formatNumber(to.balance);
+
+
+  calculateSwap();
+
+}
+
+
+/* ==========================================================
+   CALCULATE SWAP
+========================================================== */
+
+function calculateSwap(){
+
+  const amount =
+    parseFloat(fromAmount.value) || 0;
+
+  const from =
+    TOKENS[fromToken];
+
+  const to =
+    TOKENS[toToken];
+
+
+  if(amount <= 0){
+
+    toAmount.value = "";
+
+    rateText.textContent =
+      "1 " + from.symbol +
+      " ≈ " +
+      formatNumber(from.price / to.price) +
+      " " + to.symbol;
+
+    detailRate.textContent =
+      "1 " + from.symbol +
+      " ≈ " +
+      formatNumber(from.price / to.price) +
+      " " + to.symbol;
+
+    minimumReceived.textContent =
+      "0";
+
+    networkFee.textContent =
+      "$0.00";
+
+    swapButton.textContent =
+      "Enter amount";
+
+    swapButton.classList.add("disabled");
+
+    return;
+  }
+
+
+  /*
+    USD VALUE OF INPUT
+  */
+
+  const usdValue =
+    amount * from.price;
+
+
+  /*
+    RECEIVED AMOUNT
+  */
+
+  const receive =
+    usdValue / to.price;
+
+
+  /*
+    DEMO NETWORK FEE
+  */
+
+  let fee = 0.50;
+
+  if(
+    fromToken.includes("TRC20") ||
+    toToken.includes("TRC20")
+  ){
+    fee = 0.25;
+  }
+
+  if(
+    fromToken === "ETH" ||
+    toToken === "ETH"
+  ){
+    fee = 2.50;
+  }
+
+
+  /*
+    MINIMUM RECEIVED
+    USING 0.5% SLIPPAGE
+  */
+
+  const minimum =
+    receive * 0.995;
+
+
+  toAmount.value =
+    formatNumber(receive);
+
+  rateText.textContent =
+    "1 " +
+    from.symbol +
+    " ≈ " +
+    formatNumber(from.price / to.price) +
+    " " +
+    to.symbol;
+
+  detailRate.textContent =
+    "1 " +
+    from.symbol +
+    " ≈ " +
+    formatNumber(from.price / to.price) +
+    " " +
+    to.symbol;
+
+  minimumReceived.textContent =
+    formatNumber(minimum) +
+    " " +
+    to.symbol;
+
+  networkFee.textContent =
+    formatUSD(fee);
+
+
+  /*
+    CHECK BALANCE
+  */
+
+  if(amount > from.balance){
+
+    swapButton.textContent =
+      "Insufficient balance";
+
+    swapButton.classList.add("disabled");
+
+    return;
+  }
+
+
+  swapButton.textContent =
+    "Review Swap";
+
+  swapButton.classList.remove("disabled");
+
+}
+
+
+/* ==========================================================
+   MAX BUTTON
+========================================================== */
+
+function useMax(){
+
+  const balance =
+    TOKENS[fromToken].balance;
+
+  fromAmount.value =
+    balance;
+
+  calculateSwap();
+
+}
+
+
+/* ==========================================================
+   SWITCH TOKENS
+========================================================== */
+
+function switchTokens(){
+
+  const oldFrom =
+    fromToken;
+
+  fromToken =
+    toToken;
+
+  toToken =
+    oldFrom;
+
+
+  const currentAmount =
+    fromAmount.value;
+
+  fromAmount.value =
+    "";
+
+
+  updateDisplay();
+
+
+  /*
+    Don't carry the previous amount if
+    the new token cannot afford it.
+  */
+
+  if(currentAmount){
+
+    fromAmount.value =
+      currentAmount;
+
+    calculateSwap();
+
+  }
+
+}
+
+
+/* ==========================================================
+   TOKEN MODAL
+========================================================== */
+
+function openTokenModal(side){
+
+  selectingSide =
+    side;
+
+  document
+    .getElementById("tokenModal")
+    .classList.add("show");
+
+  document
+    .getElementById("tokenSearch")
+    .value = "";
+
+  renderTokens();
+
+  setTimeout(()=>{
+
+    document
+      .getElementById("tokenSearch")
+      .focus();
+
+  },100);
+
+}
+
+
+function closeTokenModal(){
+
+  document
+    .getElementById("tokenModal")
+    .classList.remove("show");
+
+}
+
+
+function closeModalOutside(event){
+
+  if(
+    event.target.id === "tokenModal"
+  ){
+    closeTokenModal();
+  }
+
+}
+
+
+/* ==========================================================
+   RENDER TOKENS
+========================================================== */
+
+function renderTokens(search=""){
+
+  const list =
+    document.getElementById("tokenList");
+
+  list.innerHTML = "";
+
+
+  Object.keys(TOKENS).forEach(key=>{
+
+    const token =
+      TOKENS[key];
+
+    const searchable =
+      (
+        token.symbol +
+        " " +
+        token.name +
+        " " +
+        (token.network || "")
+      ).toLowerCase();
+
+
+    if(
+      search &&
+      !searchable.includes(
+        search.toLowerCase()
+      )
+    ){
+      return;
+    }
+
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "tokenItem";
+
+    button.onclick = function(){
+
+      selectToken(key);
+
+    };
+
+
+    const networkText =
+      token.network
+        ? " • " + token.network
+        : "";
+
+
+    button.innerHTML = `
+
+      <span
+        class="tokenIcon"
+        style="background:${token.color}"
+      >
+        ${token.icon}
+      </span>
+
+      <span class="tokenInfo">
+
+        <span class="tokenSymbol">
+          ${token.symbol}${networkText}
+        </span>
+
+        <span class="tokenFullName">
+          ${token.name}
+        </span>
+
+      </span>
+
+      <span class="tokenPrice">
+
+        <strong>
+          ${formatUSD(token.price)}
+        </strong>
+
+        <small>
+          Balance ${formatNumber(token.balance)}
+        </small>
+
+      </span>
+
+    `;
+
+
+    list.appendChild(button);
+
+  });
+
+
+}
+
+
+/* ==========================================================
+   SEARCH
+========================================================== */
+
+function filterTokens(){
+
+  const value =
+    document
+      .getElementById("tokenSearch")
+      .value;
+
+  renderTokens(value);
+
+}
+
+
+/* ==========================================================
+   SELECT TOKEN
+========================================================== */
+
+function selectToken(key){
+
+  if(selectingSide === "from"){
+
+    if(key === toToken){
+
+      toToken =
+        fromToken;
+
+    }
+
+    fromToken =
+      key;
+
+  }else{
+
+    if(key === fromToken){
+
+      fromToken =
+        toToken;
+
+    }
+
+    toToken =
+      key;
+
+  }
+
+
+  closeTokenModal();
+
+  updateDisplay();
+
+}
+
+
+/* ==========================================================
+   CONFIRM SWAP
+========================================================== */
+
+function openConfirm(){
+
+  const amount =
+    parseFloat(fromAmount.value) || 0;
+
+  const from =
+    TOKENS[fromToken];
+
+  const to =
+    TOKENS[toToken];
+
+
+  if(amount <= 0){
+    return;
+  }
+
+
+  if(amount > from.balance){
+
+    showToast(
+      "Insufficient " + from.symbol + " balance"
+    );
+
+    return;
+  }
+
+
+  const received =
+    amount * from.price / to.price;
+
+
+  let fee = 0.50;
+
+  if(
+    fromToken.includes("TRC20") ||
+    toToken.includes("TRC20")
+  ){
+    fee = 0.25;
+  }
+
+  if(
+    fromToken === "ETH" ||
+    toToken === "ETH"
+  ){
+    fee = 2.50;
+  }
+
+
+  document.getElementById(
+    "confirmAmount"
+  ).textContent =
+    formatNumber(received) +
+    " " +
+    to.symbol;
+
+
+  document.getElementById(
+    "confirmFrom"
+  ).textContent =
+    formatNumber(amount) +
+    " " +
+    from.symbol;
+
+
+  document.getElementById(
+    "confirmTo"
+  ).textContent =
+    formatNumber(received) +
+    " " +
+    to.symbol;
+
+
+  document.getElementById(
+    "confirmRate"
+  ).textContent =
+    "1 " +
+    from.symbol +
+    " ≈ " +
+    formatNumber(from.price / to.price) +
+    " " +
+    to.symbol;
+
+
+  document.getElementById(
+    "confirmFee"
+  ).textContent =
+    formatUSD(fee);
+
+
+  document
+    .getElementById("confirmModal")
+    .classList.add("show");
+
+}
+
+
+function closeConfirm(){
+
+  document
+    .getElementById("confirmModal")
+    .classList.remove("show");
+
+}
+
+
+function closeConfirmOutside(event){
+
+  if(
+    event.target.id === "confirmModal"
+  ){
+    closeConfirm();
+  }
+
+}
+
+
+/* ==========================================================
+   COMPLETE DEMO SWAP
+========================================================== */
+
+function completeSwap(){
+
+  const amount =
+    parseFloat(fromAmount.value) || 0;
+
+  const from =
+    TOKENS[fromToken];
+
+  const to =
+    TOKENS[toToken];
+
+
+  if(
+    amount <= 0 ||
+    amount > from.balance
+  ){
+    closeConfirm();
+    return;
+  }
+
+
+  const received =
+    amount * from.price / to.price;
+
+
+  /*
+    UPDATE DEMO BALANCES
+  */
+
+  from.balance -= amount;
+
+  to.balance += received;
+
+
+  /*
+    CLEAR INPUT
+  */
+
+  fromAmount.value = "";
+
+  toAmount.value = "";
+
+
+  closeConfirm();
+
+  updateDisplay();
+
+
+  showToast(
+    "Swap completed successfully"
+  );
+
+}
+
+
+/* ==========================================================
+   TOAST
+========================================================== */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+
+      toast.classList.remove("show");
+
+    },2200);
+
+}
+
+
+/* ==========================================================
+   INITIALIZE
+========================================================== */
+
+updateDisplay();
+
+</script>
+
+</body>
+</html>
